@@ -1,0 +1,29 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  core-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test shared pet engine
+        run: swift test
+
+  xcode-build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build iOS app for Simulator
+        run: |
+          xcodebuild \
+            -project IOS-Pet.xcodeproj \
+            -target IOSPet \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
